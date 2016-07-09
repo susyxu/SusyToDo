@@ -1,0 +1,419 @@
+package com.susyxu.susytodo;
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import com.susyxu.susytodo.Database.MyDatabaseHelper;
+import com.susyxu.susytodo.MyClass.ScheduleItem;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.util.Calendar;
+
+import me.drakeet.materialdialog.MaterialDialog;
+
+/**
+ * Created by susy on 16/7/5.
+ */
+public class AddActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
+    private static final String START_DATE_PICK_DLG_TAG = "start_date_pick_dlg";
+    private static final String END_DATE_PICK_DLG_TAG = "end_date_pick_dlg";
+    private static final String START_TIME_PICK_DLG_TAG = "start_date_pick_dlg";
+    private static final String END_TIME_PICK_DLG_TAG = "end_date_pick_dlg";
+
+    private Button mStartDate;
+    private Button mEndDate;
+    private Button mStartTime;
+    private Button mEndTime;
+    private Button mState;
+    private Button mAlarm;
+    private Button mType;
+    private EditText mName;
+    private EditText mComments;
+
+    private String controlFlag;
+    private int scheduleId;
+    private MyDatabaseHelper dbHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //要将这个activity的theme在manifest里设置成NoActionBar，因为AppCompatActivity本身就有ActionBar了
+        setContentView(R.layout.activity_add);
+
+        //自定义ActionBar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_24dp);
+
+        //设置开始 和 结束日期
+        mStartDate = (Button) findViewById(R.id.btn_schedule_date_start);
+        mEndDate = (Button) findViewById(R.id.btn_schedule_date_end);
+        mStartDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStartDatePickerDialog();
+            }
+        });
+        mEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEndDatePickerDialog();
+            }
+        });
+
+        //设置开始 和 结束时间
+        mStartTime = (Button) findViewById(R.id.btn_schedule_time_start);
+        mEndTime = (Button) findViewById(R.id.btn_schedule_time_end);
+        mStartTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showStartTimePickerDialog();
+            }
+        });
+        mEndTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEndTimePickerDialog();
+            }
+        });
+
+        //设置状态
+        mState = (Button) findViewById(R.id.btn_state);
+        mState.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mChangeStateMaterialDialog.show();
+            }
+        });
+
+        //设置闹钟提醒
+        mAlarm = (Button) findViewById(R.id.btn_alarm_time);
+        mAlarm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAlarmMaterialDialog.show();
+            }
+        });
+
+        //设置分类
+        mType = (Button) findViewById(R.id.btn_schedule_type);
+        mType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mTypeMaterialDialog.show();
+            }
+        });
+
+        //标题和备注
+        mName = (EditText) findViewById(R.id.edit_schedule_title);
+        mComments = (EditText) findViewById(R.id.edit_schedule_note);
+
+        //获取传递过来的对象
+        final ScheduleItem scheduleItem = (ScheduleItem) getIntent().getSerializableExtra("ScheduleItem");
+        controlFlag = getIntent().getStringExtra("updateORInsert");
+
+        //新建一个事务的各个控件初始值
+        if (controlFlag.equals("insert")) {
+            Calendar now = Calendar.getInstance();
+            String date;
+            String month = (now.get(Calendar.MONTH) + 1) + "";
+            String day = now.get(Calendar.DAY_OF_MONTH) + "";
+            if ((now.get(Calendar.MONTH) + 1) <= 8)
+                month = "0" + month;
+            if (now.get(Calendar.DAY_OF_MONTH) <= 9)
+                day = "0" + day;
+            date = now.get(Calendar.YEAR) + "." + month + "." + day;
+            mStartDate.setText(date);
+            mEndDate.setText(date);
+            mStartTime.setText("08:00");
+            mEndTime.setText("10:00");
+        }
+        //修改一个事务的各个控件初始值
+        else if (controlFlag.equals("update")) {
+            scheduleId = scheduleItem.getId();
+
+            mName.setText(scheduleItem.getName());
+            mStartDate.setText(scheduleItem.getStartDate());
+            mEndDate.setText(scheduleItem.getEndDate());
+            mStartTime.setText(scheduleItem.getStartTime());
+            mEndTime.setText(scheduleItem.getEndTime());
+            if (scheduleItem.getState() == 0) {
+                mState.setText("未完成");
+                mState.setTextColor(0xFFF44336);
+            } else {
+                mState.setText("已完成");
+                mState.setTextColor(0xFF4CAF50);
+            }
+            if (scheduleItem.getAlarm() == 0)
+                mAlarm.setText("不提醒");
+            else if (scheduleItem.getAlarm() == 10)
+                mAlarm.setText("提前10分钟提醒");
+            else if (scheduleItem.getAlarm() == 30)
+                mAlarm.setText("提前30分钟提醒");
+            else if (scheduleItem.getAlarm() == 60)
+                mAlarm.setText("提前1小时提醒");
+            if (scheduleItem.getType().equals("会议"))
+                mType.setText("会议");
+            else if (scheduleItem.getType().equals("学习"))
+                mType.setText("学习");
+            else if (scheduleItem.getType().equals("约会"))
+                mType.setText("约会");
+            else if (scheduleItem.getType().equals("生活"))
+                mType.setText("生活");
+            else if (scheduleItem.getType().equals("娱乐"))
+                mType.setText("娱乐");
+            mComments.setText(scheduleItem.getComments());
+        }
+    }
+
+    //初始化修改状态对话框
+    MaterialDialog mChangeStateMaterialDialog = new MaterialDialog(this)
+            .setContentView(R.layout.dialog_change_state)
+            .setPositiveButton("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RadioButton r = (RadioButton)findViewById(R.id.radioButton_finished);
+                    if(r.isChecked()==true)
+                        Log.i("test","fsfsdfsff");
+                    mChangeStateMaterialDialog.dismiss();
+                }
+            })
+            .setNegativeButton("CANCEL", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mChangeStateMaterialDialog.dismiss();
+                }
+            });
+
+
+    //初始化提示对话框
+    MaterialDialog mWarningMaterialDialog = new MaterialDialog(this)
+            .setTitle("提示")
+            .setMessage("请填写事务名称")
+            .setPositiveButton("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mWarningMaterialDialog.dismiss();
+                }
+            });
+
+
+    //初始化分类的对话框
+    MaterialDialog mTypeMaterialDialog = new MaterialDialog(this)
+            .setContentView(R.layout.dialog_type)
+            .setPositiveButton("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTypeMaterialDialog.dismiss();
+                }
+            })
+            .setNegativeButton("CANCEL", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mTypeMaterialDialog.dismiss();
+                }
+            });
+
+    //初始化闹钟提醒的对话框
+    MaterialDialog mAlarmMaterialDialog = new MaterialDialog(this)
+            .setContentView(R.layout.dialog_alarm)
+            .setPositiveButton("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAlarmMaterialDialog.dismiss();
+                }
+            })
+            .setNegativeButton("CANCEL", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mAlarmMaterialDialog.dismiss();
+                }
+            });
+
+    //选择结束时间的对话框
+    private void showEndTimePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+                        String hour = hourOfDay + "";
+                        String min = minute + "";
+                        if (hourOfDay <= 9)
+                            hour = "0" + hour;
+                        if (minute <= 9)
+                            min = "0" + min;
+                        mEndTime.setText(hour + ":" + min);
+                    }
+                },
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                true
+        );
+        tpd.show(getFragmentManager(), END_TIME_PICK_DLG_TAG);
+    }
+
+    //选择开始时间的对话框
+    private void showStartTimePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog tpd = TimePickerDialog.newInstance(
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+                        String hour = hourOfDay + "";
+                        String min = minute + "";
+                        if (hourOfDay <= 9)
+                            hour = "0" + hour;
+                        if (minute <= 9)
+                            min = "0" + min;
+                        mStartTime.setText(hour + ":" + min);
+                    }
+                },
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                true
+        );
+        tpd.show(getFragmentManager(), START_TIME_PICK_DLG_TAG);
+    }
+
+    //选择结束日期的对话框
+    private void showEndDatePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                AddActivity.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), END_DATE_PICK_DLG_TAG);
+    }
+
+    //选择开始日期的对话框
+    private void showStartDatePickerDialog() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                AddActivity.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.show(getFragmentManager(), START_DATE_PICK_DLG_TAG);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String date;
+        String month = (monthOfYear + 1) + "";
+        String day = dayOfMonth + "";
+        switch (view.getTag()) {
+            case START_DATE_PICK_DLG_TAG:
+                if (monthOfYear <= 8)
+                    month = "0" + month;
+                if (dayOfMonth <= 9)
+                    day = "0" + day;
+                date = year + "." + month + "." + day;
+                mStartDate.setText(date);
+                break;
+            case END_DATE_PICK_DLG_TAG:
+                if (monthOfYear <= 8)
+                    month = "0" + month;
+                if (dayOfMonth <= 9)
+                    day = "0" + day;
+                date = year + "." + month + "." + day;
+                mEndDate.setText(date);
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_add_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent = new Intent(this, MainActivity.class);
+        switch (item.getItemId()) {
+            case R.id.action_save:
+                if (mName.getText().toString().length() == 0 || mName.getText().toString().trim().length() == 0) {  //判断信息是否完整
+                    mWarningMaterialDialog.show();
+                    return true;
+                } else {
+                    //对添加的数据进行保存insert
+                    if (controlFlag.equals("insert")) {
+                        insetItemToSQLite();
+                    }
+                    //对当前事务进行修改update
+                    else if (controlFlag.equals("update")) {
+
+                    }
+                    NavUtils.navigateUpTo(this, intent);
+                    return true;
+                }
+            case android.R.id.home:
+                NavUtils.navigateUpTo(this, intent);
+                return true;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void insetItemToSQLite() {
+        dbHelper = new MyDatabaseHelper(AddActivity.this, "BookStore.db", null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select max(id) as max_id from schedule", null);
+        int max_id = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                max_id = cursor.getInt(cursor.getColumnIndex("max_id"));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        int alarm = 0;
+        if(mAlarm.getText().toString().equals("不提醒"))
+            alarm = 0;
+        else if (mAlarm.getText().toString().equals("提前10分钟提醒"))
+            alarm = 10;
+        else if (mAlarm.getText().toString().equals("提前30分钟提醒"))
+            alarm = 30;
+        else if (mAlarm.getText().toString().equals("提前1小时提醒"))
+            alarm = 60;
+        int state = 0;
+        if(mState.getText().toString().equals("已完成"))
+            state = 1;
+        else if (mState.getText().toString().equals("未完成"))
+            state = 0;
+        String[] sqlVar = new String[]{
+                String.valueOf(max_id + 1),
+                mName.getText().toString(),
+                mStartDate.getText().toString(),
+                mEndDate.getText().toString(),
+                mStartTime.getText().toString(),
+                mEndTime.getText().toString(),
+                String.valueOf(alarm),
+                mType.getText().toString(),
+                mComments.getText().toString(),
+                String.valueOf(state)};
+        db.execSQL("insert into schedule (id, name, startDate, endDate, startTime, endTime, alarm, type, comments, state) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                , sqlVar);
+    }
+}

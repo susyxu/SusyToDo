@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp"
+              app:layout_behavior="@string/appbar_scrolling_view_behavior"
+              tools:showIn="@layout/activity_add">
+
+    <LinearLayout
+        style="@style/ScheduleDetailItemContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_clock_24dp"/>
+
+        <Button
+            android:id="@+id/btn_schedule_date_start"
+            style="@style/ScheduleDetailButton"
+            android:layout_width="wrap_content"
+            android:text="2016.07.07"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/btn_schedule_time_start"
+            style="@style/ScheduleDetailButton"
+            android:layout_width="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:gravity="right|center_vertical"
+            android:text="11:00"/>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/ScheduleDetailItemContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_clock_24dp"/>
+
+        <Button
+            android:id="@+id/btn_schedule_date_end"
+            style="@style/ScheduleDetailButton"
+            android:layout_width="wrap_content"
+            android:text="2016.07.07"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/btn_schedule_time_end"
+            style="@style/ScheduleDetailButton"
+            android:layout_width="wrap_content"
+            android:gravity="right|center_vertical"
+            android:text="12:00"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        style="@style/ScheduleDetailItemContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_check_box_24dp"/>
+
+        <Button
+            android:id="@+id/btn_state"
+            style="@style/ScheduleDetailButton"
+            android:text="未完成"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        style="@style/ScheduleDetailItemContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_ring_24dp"/>
+
+        <Button
+            android:id="@+id/btn_alarm_time"
+            style="@style/ScheduleDetailButton"
+            android:text="提前10分钟提醒"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        style="@style/ScheduleDetailItemContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_type_24dp"/>
+
+        <Button
+            android:id="@+id/btn_schedule_type"
+            style="@style/ScheduleDetailButton"
+            android:text="@string/navigation_drawer_title_daily"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        style="@style/ScheduleDetailItemContainer"
+        android:orientation="horizontal">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:layout_gravity="top"
+            android:layout_marginTop="@dimen/schedule_detail_item_note_margin_top"
+            android:src="@drawable/ic_comment_24dp"/>
+
+        <EditText
+            android:id="@+id/edit_schedule_note"
+            style="@style/ScheduleDetailEdit"
+            android:layout_gravity="top"
+            android:layout_marginTop="@dimen/schedule_detail_item_note_margin_top"
+            android:hint="添加备注"/>
+
+    </LinearLayout>
+</LinearLayout>

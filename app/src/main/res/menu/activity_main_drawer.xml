@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_all"
+            android:icon="@drawable/ic_drawer_type_all_24dp"
+            android:title="@string/navigation_drawer_title_all"/>
+        <item
+            android:id="@+id/nav_meeting"
+            android:icon="@drawable/ic_drawer_type_meeting_24dp"
+            android:title="@string/navigation_drawer_title_meeting"/>
+        <item
+            android:id="@+id/nav_study"
+            android:icon="@drawable/ic_drawer_type_study_24dp"
+            android:title="@string/navigation_drawer_title_study"/>
+        <item
+            android:id="@+id/nav_date"
+            android:icon="@drawable/ic_drawer_type_date_24dp"
+            android:title="@string/navigation_drawer_title_date"/>
+        <item
+            android:id="@+id/nav_daily"
+            android:icon="@drawable/ic_drawer_type_daily_24dp"
+            android:title="@string/navigation_drawer_title_daily"/>
+        <item
+            android:id="@+id/nav_entertain"
+            android:icon="@drawable/ic_drawer_type_entertain_24dp"
+            android:title="@string/navigation_drawer_title_entertain"/>
+        <item
+            android:id="@+id/nav_done"
+            android:icon="@drawable/ic_drawer_type_done_24dp"
+            android:title="@string/navigation_drawer_title_done"/>
+    </group>
+
+    <item android:title="@string/navigation_drawer_title_soft">
+        <menu>
+            <item
+                android:id="@+id/nav_setting"
+                android:icon="@drawable/ic_drawer_setting_24dp"
+                android:title="@string/navigation_drawer_title_setting"/>
+        </menu>
+    </item>
+
+</menu>
