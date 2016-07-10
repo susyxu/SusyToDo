@@ -7,22 +7,22 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 import com.susyxu.susytodo.Database.MyDatabaseHelper;
 import com.susyxu.susytodo.MyClass.ScheduleItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.yarolegovich.lovelydialog.LovelyChoiceDialog;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -99,7 +99,22 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         mState.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mChangeStateMaterialDialog.show();
+                List<String> list = new ArrayList<String>();
+                list.add("已完成");
+                list.add("未完成");
+                new LovelyChoiceDialog(AddActivity.this)
+                        .setTopColorRes(R.color.colorAccent)
+                        .setTitle("请选择事务状态")
+                        .setItems(list, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                            @Override
+                            public void onItemSelected(int position, String item) {
+                                if (item.equals("已完成"))
+                                    mState.setText("已完成");
+                                else if(item.equals("未完成"))
+                                    mState.setText("未完成");
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -108,7 +123,28 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         mAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAlarmMaterialDialog.show();
+                List<String> list = new ArrayList<String>();
+                list.add("不提醒");
+                list.add("提前10分钟提醒");
+                list.add("提前30分钟提醒");
+                list.add("提前1小时提醒");
+                new LovelyChoiceDialog(AddActivity.this)
+                        .setTopColorRes(R.color.colorAccent)
+                        .setTitle("请选择事务提醒")
+                        .setItems(list, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                            @Override
+                            public void onItemSelected(int position, String item) {
+                                if (item.equals("不提醒"))
+                                    mAlarm.setText("不提醒");
+                                else if(item.equals("提前10分钟提醒"))
+                                    mAlarm.setText("提前10分钟提醒");
+                                else if(item.equals("提前30分钟提醒"))
+                                    mAlarm.setText("提前30分钟提醒");
+                                else if(item.equals("提前1小时提醒"))
+                                    mAlarm.setText("提前1小时提醒");
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -117,7 +153,31 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         mType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTypeMaterialDialog.show();
+                List<String> list = new ArrayList<String>();
+                list.add("会议");
+                list.add("学习");
+                list.add("约会");
+                list.add("生活");
+                list.add("娱乐");
+                new LovelyChoiceDialog(AddActivity.this)
+                        .setTopColorRes(R.color.colorAccent)
+                        .setTitle("请选择事务类型")
+                        .setItems(list, new LovelyChoiceDialog.OnItemSelectedListener<String>() {
+                            @Override
+                            public void onItemSelected(int position, String item) {
+                                if (item.equals("会议"))
+                                    mType.setText("会议");
+                                else if(item.equals("学习"))
+                                    mType.setText("学习");
+                                else if(item.equals("约会"))
+                                    mType.setText("约会");
+                                else if(item.equals("生活"))
+                                    mType.setText("生活");
+                                else if(item.equals("娱乐"))
+                                    mType.setText("娱乐");
+                            }
+                        })
+                        .show();
             }
         });
 
@@ -183,26 +243,6 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         }
     }
 
-    //初始化修改状态对话框
-    MaterialDialog mChangeStateMaterialDialog = new MaterialDialog(this)
-            .setContentView(R.layout.dialog_change_state)
-            .setPositiveButton("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    RadioButton r = (RadioButton)findViewById(R.id.radioButton_finished);
-                    if(r.isChecked()==true)
-                        Log.i("test","fsfsdfsff");
-                    mChangeStateMaterialDialog.dismiss();
-                }
-            })
-            .setNegativeButton("CANCEL", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mChangeStateMaterialDialog.dismiss();
-                }
-            });
-
-
     //初始化提示对话框
     MaterialDialog mWarningMaterialDialog = new MaterialDialog(this)
             .setTitle("提示")
@@ -211,39 +251,6 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                 @Override
                 public void onClick(View v) {
                     mWarningMaterialDialog.dismiss();
-                }
-            });
-
-
-    //初始化分类的对话框
-    MaterialDialog mTypeMaterialDialog = new MaterialDialog(this)
-            .setContentView(R.layout.dialog_type)
-            .setPositiveButton("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mTypeMaterialDialog.dismiss();
-                }
-            })
-            .setNegativeButton("CANCEL", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mTypeMaterialDialog.dismiss();
-                }
-            });
-
-    //初始化闹钟提醒的对话框
-    MaterialDialog mAlarmMaterialDialog = new MaterialDialog(this)
-            .setContentView(R.layout.dialog_alarm)
-            .setPositiveButton("OK", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAlarmMaterialDialog.dismiss();
-                }
-            })
-            .setNegativeButton("CANCEL", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mAlarmMaterialDialog.dismiss();
                 }
             });
 
@@ -350,7 +357,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent = new Intent(this, MainActivity.class);
+        //Intent intent = new Intent(this, MainActivity.class);
         switch (item.getItemId()) {
             case R.id.action_save:
                 if (mName.getText().toString().length() == 0 || mName.getText().toString().trim().length() == 0) {  //判断信息是否完整
@@ -363,18 +370,53 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                     }
                     //对当前事务进行修改update
                     else if (controlFlag.equals("update")) {
-
+                        updateItemToSQLite();
                     }
-                    NavUtils.navigateUpTo(this, intent);
+                    //NavUtils.navigateUpTo(this, intent);
+                    finish();
                     return true;
                 }
             case android.R.id.home:
-                NavUtils.navigateUpTo(this, intent);
+                //NavUtils.navigateUpTo(this, intent);
+                finish();
                 return true;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateItemToSQLite() {
+        dbHelper = new MyDatabaseHelper(AddActivity.this, "BookStore.db", null, 1);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int alarm = 0;
+        if(mAlarm.getText().toString().equals("不提醒"))
+            alarm = 0;
+        else if (mAlarm.getText().toString().equals("提前10分钟提醒"))
+            alarm = 10;
+        else if (mAlarm.getText().toString().equals("提前30分钟提醒"))
+            alarm = 30;
+        else if (mAlarm.getText().toString().equals("提前1小时提醒"))
+            alarm = 60;
+        int state = 0;
+        if(mState.getText().toString().equals("已完成"))
+            state = 1;
+        else if (mState.getText().toString().equals("未完成"))
+            state = 0;
+        String[] sqlVar = new String[]{
+                mName.getText().toString(),
+                mStartDate.getText().toString(),
+                mEndDate.getText().toString(),
+                mStartTime.getText().toString(),
+                mEndTime.getText().toString(),
+                String.valueOf(alarm),
+                mType.getText().toString(),
+                mComments.getText().toString(),
+                String.valueOf(state),
+                String.valueOf(scheduleId)
+                };
+        db.execSQL("update schedule set name=?, startDate=?, endDate=?, startTime=?, endTime=?, alarm=?, type=?, comments=?, state=? where id=?"
+                , sqlVar);
     }
 
     private void insetItemToSQLite() {

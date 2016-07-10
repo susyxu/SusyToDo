@@ -30,6 +30,7 @@ public class EntertainFragment extends Fragment {
     private ListView mListView;
     private List<ScheduleItem> mScheduleItems;
     private MyDatabaseHelper dbHelper;
+    ScheduleItemsAdapter scheduleItemsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,6 +43,22 @@ public class EntertainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_all,null);
         mListView = (ListView) view.findViewById(R.id.all_listview);
 
+        initItems();
+
+        scheduleItemsAdapter = new ScheduleItemsAdapter(getActivity(), mScheduleItems);
+        mListView.setAdapter(scheduleItemsAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                intent.putExtra("ScheduleItemsObj", mScheduleItems.get(position));
+                startActivity(intent);
+            }
+        });
+        return view;
+    }
+
+    private void initItems() {
         dbHelper = new MyDatabaseHelper(getActivity(), "BookStore.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from schedule where state = 0 and type='娱乐'", null);
@@ -63,17 +80,13 @@ public class EntertainFragment extends Fragment {
             } while (cursor.moveToNext());
         }
         cursor.close();
+    }
 
-        ScheduleItemsAdapter scheduleItemsAdapter = new ScheduleItemsAdapter(getActivity(), mScheduleItems);
-        mListView.setAdapter(scheduleItemsAdapter);
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra("ScheduleItemsObj", mScheduleItems.get(position));
-                startActivity(intent);
-            }
-        });
-        return view;
+    @Override
+    public void onResume() {
+        super.onResume();
+        mScheduleItems.clear();
+        initItems();
+        scheduleItemsAdapter.refresh(mScheduleItems);
     }
 }

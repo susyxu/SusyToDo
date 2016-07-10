@@ -107,6 +107,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_setting){
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_search){
+            Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            startActivity(intent);
         }
 
         ft.replace(R.id.mainFragment_layout, mFragment);

@@ -14,8 +14,9 @@
     <string name="navigation_drawer_title_date">约会</string>
     <string name="navigation_drawer_title_daily">生活</string>
     <string name="navigation_drawer_title_done">已完成</string>
-    <string name="navigation_drawer_title_soft">软件</string>
+    <string name="navigation_drawer_title_soft">功能</string>
     <string name="navigation_drawer_title_setting">设置</string>
+    <string name="navigation_drawer_title_search">搜索</string>
     <string name="schedule_save">保存</string>
     <string name="schedule_del">删除</string>
 </resources>
