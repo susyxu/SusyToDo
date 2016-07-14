@@ -33,6 +33,10 @@
             android:name=".DetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".Alarm.AlarmActivity">
+        </activity>
+        <receiver android:name=".Alarm.AlarmReceiver" android:process=":remote" />
     </application>
 
 </manifest>

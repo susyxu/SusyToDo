@@ -1,5 +1,7 @@
 package com.susyxu.susytodo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.susyxu.susytodo.Alarm.AlarmActivity;
+import com.susyxu.susytodo.Alarm.AlarmReceiver;
 import com.susyxu.susytodo.MainFragments.AllFragment;
 import com.susyxu.susytodo.MainFragments.DailyFragment;
 import com.susyxu.susytodo.MainFragments.DateFragment;
@@ -23,6 +27,7 @@ import com.susyxu.susytodo.MainFragments.EntertainFragment;
 import com.susyxu.susytodo.MainFragments.MeetingFragment;
 import com.susyxu.susytodo.MainFragments.StudyFragment;
 import com.susyxu.susytodo.Settings.SettingActivity;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -118,5 +123,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
     }
 }

@@ -1,5 +1,7 @@
 package com.susyxu.susytodo;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.susyxu.susytodo.Alarm.AlarmReceiver;
 import com.susyxu.susytodo.Database.MyDatabaseHelper;
 import com.susyxu.susytodo.MyClass.ScheduleItem;
 
@@ -141,6 +144,12 @@ public class DetailsActivity extends AppCompatActivity{
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String[] sqlVar = new String[]{String.valueOf(schedule_id)};
         db.execSQL("delete from schedule where id = ?", sqlVar);
+        //需要删除对应的广播
+        Intent intent = new Intent(DetailsActivity.this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(DetailsActivity.this, schedule_id, intent, 0);
+        AlarmManager am;
+        //取消闹钟
+        am = (AlarmManager) getSystemService(ALARM_SERVICE);
+        am.cancel(pendingIntent);
     }
-
 }
