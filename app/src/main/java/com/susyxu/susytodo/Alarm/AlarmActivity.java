@@ -6,10 +6,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
-import com.susyxu.susytodo.R;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -24,6 +21,7 @@ public class AlarmActivity extends Activity {
     String endDate;
     String startTime;
     String endTime;
+    String ringtoneUriString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +33,16 @@ public class AlarmActivity extends Activity {
         endDate = sharedPreferences.getString("endDate", "null");
         startTime = sharedPreferences.getString("startTime", "null");
         endTime = sharedPreferences.getString("endTime", "null");
+        ringtoneUriString = sharedPreferences.getString("ringtoneUriString", getSystemDefultRingtoneUri().toString());
 
-        alarmMusic = MediaPlayer.create(this, getSystemDefultRingtoneUri());
+        //将设置的铃声转换为Uri类型
+        Uri uri = Uri.parse(ringtoneUriString);
+        alarmMusic = MediaPlayer.create(this, uri);
         alarmMusic.setLooping(true);
         alarmMusic.start();
-        materialDialog.setTitle("" +  name);
+        materialDialog.setTitle("" + name);
         materialDialog.show();
-        materialDialog.setMessage("" + startDate + " 的 " + startTime + " 到 "+ "\n" + endDate + " 的 " + endTime);
+        materialDialog.setMessage("" + startDate + " 的 " + startTime + " 到 " + "\n" + endDate + " 的 " + endTime);
     }
 
     MaterialDialog materialDialog = new MaterialDialog(AlarmActivity.this)

@@ -1,9 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView
-        android:layout_width="wrap_content"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello!"/>
+        android:orientation="horizontal"
+        android:paddingLeft="16dp">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_setting_ring_24dp"/>
+
+        <Button
+            android:id="@+id/btn_setting"
+            style="@style/ScheduleDetailButton"
+            android:text="设置铃声"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@android:color/darker_gray"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp">
+
+        <ImageView
+            style="@style/ScheduleDetailIcon"
+            android:src="@drawable/ic_setting_about_24dp"/>
+
+        <Button
+            android:id="@+id/btn_about"
+            style="@style/ScheduleDetailButton"
+            android:text="关于软件"
+            android:textColor="#000000"/>
+    </LinearLayout>
 </LinearLayout>

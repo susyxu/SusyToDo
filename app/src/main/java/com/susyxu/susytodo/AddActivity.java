@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -264,6 +265,17 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                 }
             });
 
+    //初始化提示对话框2
+    MaterialDialog mWarning2MaterialDialog = new MaterialDialog(this)
+            .setTitle("提示")
+            .setMessage("请填写正确的时间")
+            .setPositiveButton("OK", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mWarning2MaterialDialog.dismiss();
+                }
+            });
+
     //选择结束时间的对话框
     private void showEndTimePickerDialog() {
         Calendar now = Calendar.getInstance();
@@ -303,7 +315,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                         mStartTime.setText(hour + ":" + min);
                         mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         mCalendar.set(Calendar.MINUTE, minute);
-                        mCalendar.set(Calendar.SECOND,0);
+                        mCalendar.set(Calendar.SECOND, 0);
                     }
                 },
                 now.get(Calendar.HOUR_OF_DAY),
@@ -379,7 +391,12 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                 if (mName.getText().toString().length() == 0 || mName.getText().toString().trim().length() == 0) {  //判断信息是否完整
                     mWarningMaterialDialog.show();
                     return true;
-                } else {
+                }
+                else if(comfirmTimeLegal()==false){
+                    mWarning2MaterialDialog.show();
+                    return true;
+                }
+                else {
                     //对添加的数据进行保存insert，广播增加闹钟，请求码为id
                     if (controlFlag.equals("insert")) {
                         insetItemToSQLite();
@@ -528,6 +545,60 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
             //这里需要加上一个判断，若是过去时间就不广播了
             if (mCalendar.getTimeInMillis()-before > System.currentTimeMillis()){
                 am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis()-before, pendingIntent);
+            }
+        }
+    }
+
+    public boolean comfirmTimeLegal(){
+        int startYear;
+        int startMonth;
+        int startDay;
+
+        int endYear;
+        int endMonth;
+        int endDay;
+
+        int startHour;
+        int startMinute;
+
+        int endHour;
+        int endMinute;
+        String[] arrayStartDate = mStartDate.getText().toString().split("\\.");
+        startYear = Integer.parseInt(arrayStartDate[0]);
+        startMonth = Integer.parseInt(arrayStartDate[1]);
+        startDay = Integer.parseInt(arrayStartDate[2]);
+
+        String[] arrayEndDate = mEndDate.getText().toString().split("\\.");
+        endYear = Integer.parseInt(arrayEndDate[0]);
+        endMonth = Integer.parseInt(arrayEndDate[1]);
+        endDay = Integer.parseInt(arrayEndDate[2]);
+
+        String[] arrayStartTime = mStartTime.getText().toString().split(":");
+        startHour = Integer.parseInt(arrayStartTime[0]);
+        startMinute = Integer.parseInt(arrayStartTime[1]);
+
+        String[] arrayEndTime = mEndTime.getText().toString().split(":");
+        endHour = Integer.parseInt(arrayEndTime[0]);
+        endMinute = Integer.parseInt(arrayEndTime[1]);
+
+        if(startYear>endYear)
+            return false;
+        else{
+            if(startMonth>endMonth)
+                return false;
+            else{
+                if(startDay>endDay)
+                    return false;
+                else{
+                    if(startHour>endHour)
+                        return false;
+                    else{
+                        if (startMinute>endMinute)
+                            return false;
+                        else
+                            return true;
+                    }
+                }
             }
         }
     }
