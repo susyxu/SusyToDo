@@ -549,6 +549,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         }
     }
 
+    //有点问题
     public boolean comfirmTimeLegal(){
         int startYear;
         int startMonth;
