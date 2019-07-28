@@ -1,7 +1,6 @@
-package com.susyxu.susytodo.Database;
+package com.susy_xu.susy_todo.database;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;

@@ -1,25 +1,24 @@
-package com.susyxu.susytodo.MainFragments;
+package com.susy_xu.susy_todo.mainFragments;
 
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-import com.susyxu.susytodo.Adapters.ScheduleItemsAdapter;
-import com.susyxu.susytodo.Database.MyDatabaseHelper;
-import com.susyxu.susytodo.DetailsActivity;
-import com.susyxu.susytodo.MyClass.ScheduleItem;
-import com.susyxu.susytodo.R;
+import com.susy_xu.susy_todo.DetailsActivity;
+import com.susy_xu.susy_todo.R;
+import com.susy_xu.susy_todo.adapters.ScheduleItemsAdapter;
+import com.susy_xu.susy_todo.database.MyDatabaseHelper;
+import com.susy_xu.susy_todo.myClass.ScheduleItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ import java.util.List;
 /**
  * Created by susy on 16/7/6.
  */
-public class MeetingFragment extends Fragment {
+public class EntertainFragment extends Fragment {
     private ListView mListView;
     private List<ScheduleItem> mScheduleItems;
     private MyDatabaseHelper dbHelper;
@@ -41,7 +40,7 @@ public class MeetingFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_all,null);
+        View view = inflater.inflate(R.layout.fragment_all, null);
         mListView = (ListView) view.findViewById(R.id.all_listview);
 
         initItems();
@@ -62,7 +61,7 @@ public class MeetingFragment extends Fragment {
     private void initItems() {
         dbHelper = new MyDatabaseHelper(getActivity(), "BookStore.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        Cursor cursor = db.rawQuery("select * from schedule where state = 0 and type='会议'", null);
+        Cursor cursor = db.rawQuery("select * from schedule where state = 0 and type='娱乐'", null);
         mScheduleItems = new ArrayList<ScheduleItem>();
 
         if (cursor.moveToFirst()) {

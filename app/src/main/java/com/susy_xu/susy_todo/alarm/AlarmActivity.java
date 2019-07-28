@@ -1,4 +1,4 @@
-package com.susyxu.susytodo.Alarm;
+package com.susy_xu.susy_todo.alarm;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

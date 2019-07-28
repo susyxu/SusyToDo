@@ -1,32 +1,30 @@
-package com.susyxu.susytodo;
+package com.susy_xu.susy_todo;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.susyxu.susytodo.Alarm.AlarmActivity;
-import com.susyxu.susytodo.Alarm.AlarmReceiver;
-import com.susyxu.susytodo.MainFragments.AllFragment;
-import com.susyxu.susytodo.MainFragments.DailyFragment;
-import com.susyxu.susytodo.MainFragments.DateFragment;
-import com.susyxu.susytodo.MainFragments.DoneFragment;
-import com.susyxu.susytodo.MainFragments.EntertainFragment;
-import com.susyxu.susytodo.MainFragments.MeetingFragment;
-import com.susyxu.susytodo.MainFragments.StudyFragment;
-import com.susyxu.susytodo.Settings.SettingActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.susy_xu.susy_todo.mainFragments.AllFragment;
+import com.susy_xu.susy_todo.mainFragments.DailyFragment;
+import com.susy_xu.susy_todo.mainFragments.DateFragment;
+import com.susy_xu.susy_todo.mainFragments.DoneFragment;
+import com.susy_xu.susy_todo.mainFragments.EntertainFragment;
+import com.susy_xu.susy_todo.mainFragments.MeetingFragment;
+import com.susy_xu.susy_todo.mainFragments.StudyFragment;
+import com.susy_xu.susy_todo.settings.SettingActivity;
 
 
 public class MainActivity extends AppCompatActivity
@@ -39,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mActionBar = getSupportActionBar();
         mActionBar.setTitle("全部");
@@ -49,23 +47,23 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.mainFragment_layout, mFragment);
         ft.commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, AddActivity.class);
-                intent.putExtra("updateORInsert","insert");
+                intent.putExtra("updateORInsert", "insert");
                 startActivity(intent);
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationView.getMenu().getItem(0).setChecked(true); //默认在类型all
     }
@@ -73,7 +71,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -109,10 +107,10 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_done) {
             mActionBar.setTitle("已完成");
             mFragment = new DoneFragment();
-        } else if (id == R.id.nav_setting){
+        } else if (id == R.id.nav_setting) {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_search){
+        } else if (id == R.id.nav_search) {
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(intent);
         }

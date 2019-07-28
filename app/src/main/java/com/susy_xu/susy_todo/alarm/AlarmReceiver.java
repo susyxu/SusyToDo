@@ -1,4 +1,4 @@
-package com.susyxu.susytodo.Alarm;
+package com.susy_xu.susy_todo.alarm;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,7 +7,7 @@ import android.content.Intent;
 /**
  * Created by susy on 16/7/14.
  */
-public class AlarmReceiver extends BroadcastReceiver{
+public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Intent i = new Intent(context, AlarmActivity.class);

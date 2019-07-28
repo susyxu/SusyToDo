@@ -1,20 +1,20 @@
-package com.susyxu.susytodo.Settings;
+package com.susy_xu.susy_todo.settings;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.susyxu.susytodo.MainActivity;
-import com.susyxu.susytodo.R;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
+
+import com.susy_xu.susy_todo.MainActivity;
+import com.susy_xu.susy_todo.R;
 
 import java.io.File;
 
@@ -71,7 +71,7 @@ public class SettingActivity extends AppCompatActivity {
 
     MaterialDialog mMaterialDialog = new MaterialDialog(SettingActivity.this)
             .setTitle("关于软件")
-            .setMessage("SusyTodo V1.3"+"\n"+"于2016.07.15更新")
+            .setMessage("SusyTodo V1.3" + "\n" + "于2016.07.15更新")
             .setPositiveButton("关闭", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
