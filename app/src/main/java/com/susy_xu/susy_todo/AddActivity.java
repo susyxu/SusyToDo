@@ -1,4 +1,4 @@
-package com.susyxu.susytodo;
+package com.susy_xu.susy_todo;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -7,19 +7,18 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.susyxu.susytodo.Alarm.AlarmReceiver;
-import com.susyxu.susytodo.Database.MyDatabaseHelper;
-import com.susyxu.susytodo.MyClass.ScheduleItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import com.susy_xu.susy_todo.alarm.AlarmReceiver;
+import com.susy_xu.susy_todo.database.MyDatabaseHelper;
+import com.susy_xu.susy_todo.myClass.ScheduleItem;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -68,7 +67,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         mCalendar.setTimeInMillis(System.currentTimeMillis());
 
         //自定义ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_24dp);
@@ -121,7 +120,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                             public void onItemSelected(int position, String item) {
                                 if (item.equals("已完成"))
                                     mState.setText("已完成");
-                                else if(item.equals("未完成"))
+                                else if (item.equals("未完成"))
                                     mState.setText("未完成");
                             }
                         })
@@ -147,11 +146,11 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                             public void onItemSelected(int position, String item) {
                                 if (item.equals("不提醒"))
                                     mAlarm.setText("不提醒");
-                                else if(item.equals("提前10分钟提醒"))
+                                else if (item.equals("提前10分钟提醒"))
                                     mAlarm.setText("提前10分钟提醒");
-                                else if(item.equals("提前30分钟提醒"))
+                                else if (item.equals("提前30分钟提醒"))
                                     mAlarm.setText("提前30分钟提醒");
-                                else if(item.equals("提前1小时提醒"))
+                                else if (item.equals("提前1小时提醒"))
                                     mAlarm.setText("提前1小时提醒");
                             }
                         })
@@ -178,13 +177,13 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                             public void onItemSelected(int position, String item) {
                                 if (item.equals("会议"))
                                     mType.setText("会议");
-                                else if(item.equals("学习"))
+                                else if (item.equals("学习"))
                                     mType.setText("学习");
-                                else if(item.equals("约会"))
+                                else if (item.equals("约会"))
                                     mType.setText("约会");
-                                else if(item.equals("生活"))
+                                else if (item.equals("生活"))
                                     mType.setText("生活");
-                                else if(item.equals("娱乐"))
+                                else if (item.equals("娱乐"))
                                     mType.setText("娱乐");
                             }
                         })
@@ -363,7 +362,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                 date = year + "." + month + "." + day;
                 mStartDate.setText(date);
                 mCalendar.set(Calendar.YEAR, year);
-                mCalendar.set(Calendar.MONTH,monthOfYear);
+                mCalendar.set(Calendar.MONTH, monthOfYear);
                 mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 break;
             case END_DATE_PICK_DLG_TAG:
@@ -391,12 +390,10 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                 if (mName.getText().toString().length() == 0 || mName.getText().toString().trim().length() == 0) {  //判断信息是否完整
                     mWarningMaterialDialog.show();
                     return true;
-                }
-                else if(comfirmTimeLegal()==false){
+                } else if (comfirmTimeLegal() == false) {
                     mWarning2MaterialDialog.show();
                     return true;
-                }
-                else {
+                } else {
                     //对添加的数据进行保存insert，广播增加闹钟，请求码为id
                     if (controlFlag.equals("insert")) {
                         insetItemToSQLite();
@@ -423,7 +420,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         dbHelper = new MyDatabaseHelper(AddActivity.this, "BookStore.db", null, 1);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         int alarm = 0;
-        if(mAlarm.getText().toString().equals("不提醒"))
+        if (mAlarm.getText().toString().equals("不提醒"))
             alarm = 0;
         else if (mAlarm.getText().toString().equals("提前10分钟提醒"))
             alarm = 10;
@@ -432,7 +429,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         else if (mAlarm.getText().toString().equals("提前1小时提醒"))
             alarm = 60;
         int state = 0;
-        if(mState.getText().toString().equals("已完成"))
+        if (mState.getText().toString().equals("已完成"))
             state = 1;
         else if (mState.getText().toString().equals("未完成"))
             state = 0;
@@ -447,20 +444,21 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
                 mComments.getText().toString(),
                 String.valueOf(state),
                 String.valueOf(scheduleId)
-                };
+        };
         db.execSQL("update schedule set name=?, startDate=?, endDate=?, startTime=?, endTime=?, alarm=?, type=?, comments=?, state=? where id=?"
                 , sqlVar);
         //广播删除闹钟，重新增加，请求码为id(即scheduleId)
         //(因为AlarmManager相同id后一个会重写前一个，所以再写一遍就可以)
-        if(mAlarm.getText().toString().equals("不提醒")) { ; }
-        else {
+        if (mAlarm.getText().toString().equals("不提醒")) {
+            ;
+        } else {
             int before = 0;
-            if(mAlarm.getText().toString().equals("提前10分钟提醒"))
-                before = 10*60*1000;
-            else if(mAlarm.getText().toString().equals("提前30分钟提醒"))
-                before = 30*60*1000;
-            else if(mAlarm.getText().toString().equals("提前1小时提醒"))
-                before = 60*60*1000;
+            if (mAlarm.getText().toString().equals("提前10分钟提醒"))
+                before = 10 * 60 * 1000;
+            else if (mAlarm.getText().toString().equals("提前30分钟提醒"))
+                before = 30 * 60 * 1000;
+            else if (mAlarm.getText().toString().equals("提前1小时提醒"))
+                before = 60 * 60 * 1000;
             Intent intent = new Intent(AddActivity.this, AlarmReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(AddActivity.this, scheduleId, intent, 0);
             //用来传id号
@@ -470,13 +468,13 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
             editor.putString("startDate", mStartDate.getText().toString());
             editor.putString("endDate", mEndDate.getText().toString());
             editor.putString("startTime", mStartTime.getText().toString());
-            editor.putString("endTime",mEndTime.getText().toString());
+            editor.putString("endTime", mEndTime.getText().toString());
             editor.commit();
             AlarmManager am;
             am = (AlarmManager) getSystemService(ALARM_SERVICE);
             //这里需要加上一个判断，若是过去时间就不广播了
-            if (mCalendar.getTimeInMillis()-before > System.currentTimeMillis()){
-                am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis()-before, pendingIntent);
+            if (mCalendar.getTimeInMillis() - before > System.currentTimeMillis()) {
+                am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis() - before, pendingIntent);
             }
         }
     }
@@ -493,7 +491,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         }
         cursor.close();
         int alarm = 0;
-        if(mAlarm.getText().toString().equals("不提醒"))
+        if (mAlarm.getText().toString().equals("不提醒"))
             alarm = 0;
         else if (mAlarm.getText().toString().equals("提前10分钟提醒"))
             alarm = 10;
@@ -502,7 +500,7 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         else if (mAlarm.getText().toString().equals("提前1小时提醒"))
             alarm = 60;
         int state = 0;
-        if(mState.getText().toString().equals("已完成"))
+        if (mState.getText().toString().equals("已完成"))
             state = 1;
         else if (mState.getText().toString().equals("未完成"))
             state = 0;
@@ -520,15 +518,16 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         db.execSQL("insert into schedule (id, name, startDate, endDate, startTime, endTime, alarm, type, comments, state) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 , sqlVar);
         //广播增加闹钟，请求码为id(即max_id + 1)
-        if(mAlarm.getText().toString().equals("不提醒")) { ; }
-        else {
+        if (mAlarm.getText().toString().equals("不提醒")) {
+            ;
+        } else {
             int before = 0;
-            if(mAlarm.getText().toString().equals("提前10分钟提醒"))
-                before = 10*60*1000;
-            else if(mAlarm.getText().toString().equals("提前30分钟提醒"))
-                before = 30*60*1000;
-            else if(mAlarm.getText().toString().equals("提前1小时提醒"))
-                before = 60*60*1000;
+            if (mAlarm.getText().toString().equals("提前10分钟提醒"))
+                before = 10 * 60 * 1000;
+            else if (mAlarm.getText().toString().equals("提前30分钟提醒"))
+                before = 30 * 60 * 1000;
+            else if (mAlarm.getText().toString().equals("提前1小时提醒"))
+                before = 60 * 60 * 1000;
             Intent intent = new Intent(AddActivity.this, AlarmReceiver.class);
             PendingIntent pendingIntent = PendingIntent.getBroadcast(AddActivity.this, max_id + 1, intent, 0);
             //用来传id号
@@ -538,19 +537,19 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
             editor.putString("startDate", mStartDate.getText().toString());
             editor.putString("endDate", mEndDate.getText().toString());
             editor.putString("startTime", mStartTime.getText().toString());
-            editor.putString("endTime",mEndTime.getText().toString());
+            editor.putString("endTime", mEndTime.getText().toString());
             editor.commit();
             AlarmManager am;
             am = (AlarmManager) getSystemService(ALARM_SERVICE);
             //这里需要加上一个判断，若是过去时间就不广播了
-            if (mCalendar.getTimeInMillis()-before > System.currentTimeMillis()){
-                am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis()-before, pendingIntent);
+            if (mCalendar.getTimeInMillis() - before > System.currentTimeMillis()) {
+                am.set(AlarmManager.RTC_WAKEUP, mCalendar.getTimeInMillis() - before, pendingIntent);
             }
         }
     }
 
     //有点问题
-    public boolean comfirmTimeLegal(){
+    public boolean comfirmTimeLegal() {
         int startYear;
         int startMonth;
         int startDay;
@@ -582,19 +581,19 @@ public class AddActivity extends AppCompatActivity implements DatePickerDialog.O
         endHour = Integer.parseInt(arrayEndTime[0]);
         endMinute = Integer.parseInt(arrayEndTime[1]);
 
-        if(startYear>endYear)
+        if (startYear > endYear)
             return false;
-        else{
-            if(startMonth>endMonth)
+        else {
+            if (startMonth > endMonth)
                 return false;
-            else{
-                if(startDay>endDay)
+            else {
+                if (startDay > endDay)
                     return false;
-                else{
-                    if(startHour>endHour)
+                else {
+                    if (startHour > endHour)
                         return false;
-                    else{
-                        if (startMinute>endMinute)
+                    else {
+                        if (startMinute > endMinute)
                             return false;
                         else
                             return true;

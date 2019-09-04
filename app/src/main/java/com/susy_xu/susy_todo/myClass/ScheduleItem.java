@@ -1,11 +1,11 @@
-package com.susyxu.susytodo.MyClass;
+package com.susy_xu.susy_todo.myClass;
 
 import java.io.Serializable;
 
 /**
  * Created by susy on 16/7/6.
  */
-public class ScheduleItem implements Serializable{
+public class ScheduleItem implements Serializable {
     private int id;
     private String name;
     private String startDate;
@@ -20,7 +20,7 @@ public class ScheduleItem implements Serializable{
     public ScheduleItem() {
     }
 
-    public ScheduleItem(int id, String name, String startDate, String endDate, String startTime, String endTime, int alarm, String type, String comments,int state) {
+    public ScheduleItem(int id, String name, String startDate, String endDate, String startTime, String endTime, int alarm, String type, String comments, int state) {
         this.id = id;
         this.name = name;
         this.startDate = startDate;

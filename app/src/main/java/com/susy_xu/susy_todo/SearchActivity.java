@@ -1,12 +1,9 @@
-package com.susyxu.susytodo;
+package com.susy_xu.susy_todo;
 
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -15,9 +12,13 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.susyxu.susytodo.Adapters.ScheduleItemsAdapter;
-import com.susyxu.susytodo.Database.MyDatabaseHelper;
-import com.susyxu.susytodo.MyClass.ScheduleItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NavUtils;
+
+import com.susy_xu.susy_todo.adapters.ScheduleItemsAdapter;
+import com.susy_xu.susy_todo.database.MyDatabaseHelper;
+import com.susy_xu.susy_todo.myClass.ScheduleItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,15 +40,15 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
 
         //自定义ActionBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp);
 
-        mEditText = (EditText)findViewById(R.id.edit_schedule_search);
+        mEditText = findViewById(R.id.edit_schedule_search);
         mEditText.addTextChangedListener(textWatcher);
 
-        mListView = (ListView)findViewById(R.id.search_listview);
+        mListView = findViewById(R.id.search_listview);
         mScheduleItems = new ArrayList<ScheduleItem>();
         scheduleItemsAdapter = new ScheduleItemsAdapter(SearchActivity.this, mScheduleItems);
         mListView.setAdapter(scheduleItemsAdapter);
@@ -107,7 +108,7 @@ public class SearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             Intent intent = new Intent(this, MainActivity.class);
             NavUtils.navigateUpTo(this, intent);
             return true;

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="?android:attr/listPreferredItemHeight"
-             android:background="@android:color/white"
-             android:elevation="4dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="@android:color/white"
+    android:elevation="4dp">
+
     <LinearLayout
         android:id="@+id/schedule_item_foreground"
         android:layout_width="wrap_content"
@@ -17,7 +18,7 @@
             android:id="@+id/iv_schedule_item_color_strip"
             android:layout_width="6dp"
             android:layout_height="match_parent"
-            android:background="@color/colorDefault"/>
+            android:background="@color/colorDefault" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:textSize="12sp"
-                tools:text="Mar 3"/>
+                tools:text="Mar 3" />
 
             <TextView
                 android:id="@+id/tv_schedule_start_time"
@@ -42,7 +43,7 @@
                 android:layout_gravity="right"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                tools:text="10:00"/>
+                tools:text="10:00" />
 
         </LinearLayout>
 
@@ -51,8 +52,7 @@
             android:layout_height="@dimen/schedule_item_divider_height"
             android:layout_gravity="center_vertical"
             android:background="@color/colorScheduleItemHeaderDivider"
-            android:layout_marginRight="8dp"
-            />
+            android:layout_marginRight="8dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -68,7 +68,8 @@
                 android:lines="1"
                 android:textColor="@android:color/black"
                 android:textSize="20sp"
-                tools:text="Watch Movie"/>
+                tools:text="Watch Movie" />
+
             <TextView
                 android:layout_marginLeft="8dp"
                 android:id="@+id/tv_schedule_id"
@@ -77,7 +78,7 @@
                 android:lines="1"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
-                tools:text="0"/>
+                tools:text="0" />
         </LinearLayout>
 
     </LinearLayout>
